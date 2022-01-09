@@ -1,3 +1,26 @@
+<?php
+$servername = "localhost";
+$username = "localhost";
+$password = "1234";
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, 'doch');
+
+session_start();
+
+
+if($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['type'])){
+	$type=$_POST['type'];
+}
+
+if(!empty($_GET['typ'])){
+	$type=$_GET['typ'];
+}
+
+$sql="SELECT * FROM `book` WHERE tp='$type' AND flag=0 ORDER BY `b_name` ASC";
+$stmt=mysqli_query($conn, $sql);
+
+
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -96,13 +119,13 @@
     <div class="row">
       <div class="col-md-12">
         <div class="block text-center">
-          <h1 class="text-capitalize mb-4 text-lg">Javascript Id</h1>
+          <h1 class="text-capitalize mb-4 text-lg"><?php echo $type; ?></h1>
           <ul class="list-inline">
             <li class="list-inline-item"><a href="index.php" class="text-white">Home</a></li>
             <li class="list-inline-item"><span class="text-white">/</span></li>
 			<li class="list-inline-item"><a href="req.php" class="text-white">Requests</a></li>
             <li class="list-inline-item"><span class="text-white">/</span></li>
-            <li class="list-inline-item"><a href="#" class="text-white-50">Javascript ID</a></li>
+            <li class="list-inline-item"><a href="#" class="text-white-50"><?php echo $type; ?></a></li>
           </ul>
         </div>
       </div>
@@ -114,38 +137,33 @@
 
 <section class="light">
 	<div class="container py-2">
-		<div class="h1 text-center text-dark" id="pageHeaderTitle">[Javascript Documents] that have been requested are shown as follows</div>
+		<div class="h1 text-center text-dark" id="pageHeaderTitle"><?php echo $type; ?> that have been requested are shown as follows</div>
+
+
+		<?php 
+		$a="0";
+		while($row=mysqli_fetch_assoc($stmt)){
+		?>
+
 
 		<form action="docdet.php" method="post"><button type="submit" value="book name" style="background: rgba(255, 255, 255, 0); border: none;">
-			<article class="postcard light red">
-				<img class="postcard__img" src="https://picsum.photos/501/500" alt="book name" />	
-				
-				<div class="postcard__text t-dark">
-					<h1 class="postcard__title red"><a href="#">Podcast Title</a></h1>
-					<div class="postcard__subtitle small">
-						Author name
-					</div>
-					<div class="postcard__bar"></div>
-					<div class="postcard__preview-txt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugiat asperiores inventore beatae accusamus odit minima enim, commodi quia, doloribus eius! Ducimus nemo accusantium maiores velit corrupti tempora reiciendis molestiae repellat vero. Eveniet ipsam adipisci illo iusto quibusdam, sunt neque nulla unde ipsum dolores nobis enim quidem excepturi, illum quos!</div>
-					
+		<?php if($a==0){ ?><article class="postcard light red"><?php } else {?> <article class="postcard dark blue"> <?php } ?>
+			
+			<img class="postcard__img" src="images/book_cover/c<?php echo(rand(1,10)); ?>.jpg" alt="<?php echo $row['b_name']; ?>" />	
+			
+			<div class="postcard__text <?php if($a==0){ ?>t-dark<?php } ?>" style="width:900px;">
+				<h1 class="postcard__title <?php if($a==0){ ?>red<?php $a='1'; } else $a='0'; ?>"><?php echo $row['b_name']; ?></h1>
+				<div class="postcard__subtitle small">
+				<?php echo $row['aut']; ?>
 				</div>
-			</article></button>
-			<button type="submit" value="book name" style="background: rgba(255, 255, 255, 0); border: none;">
-			<article class="postcard dark blue">
-				<img class="postcard__img" src="https://picsum.photos/1000/1000" alt="Image Title" />
+				<div class="postcard__bar"></div>
+				<div class="postcard__preview-txt"><?php echo $row['dscp']; ?></div>
 				
-				<div class="postcard__text">
-					<h1 class="postcard__title text-white">Podcast Title</h1>
-					<div class="postcard__subtitle small">
-						Author name
-					</div>
-					<div class="postcard__bar"></div>
-					<div class="postcard__preview-txt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugiat asperiores inventore beatae accusamus odit minima enim, commodi quia, doloribus eius! Ducimus nemo accusantium maiores velit corrupti tempora reiciendis molestiae repellat vero. Eveniet ipsam adipisci illo iusto quibusdam, sunt neque nulla unde ipsum dolores nobis enim quidem excepturi, illum quos!</div>
-					
-				</div>
-			</article></button>
-		</form>
-		
+			</div>
+		</article></button>
+	</form>
+	<?php } ?>
+				
 	</div>
 </section>
 

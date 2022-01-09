@@ -1,3 +1,25 @@
+<?php
+$servername = "localhost";
+$username = "localhost";
+$password = "1234";
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, 'doch');
+
+session_start();
+
+$sql="SELECT * FROM `book` WHERE tp='Book Review' AND flag!=0 ORDER BY `time`";
+$stmt=mysqli_query($conn,$sql);
+
+$sql1="SELECT * FROM `book` WHERE tp='Operation Format' AND flag!=0 ORDER BY `time`";
+$stmt1=mysqli_query($conn,$sql1);
+
+$sql2="SELECT * FROM `book` WHERE tp='Course Documents' AND flag!=0 ORDER BY `time`";
+$stmt2=mysqli_query($conn,$sql2);
+
+$sql3="SELECT * FROM `book` WHERE tp='Policies' AND flag!=0 ORDER BY `time`";
+$stmt3=mysqli_query($conn,$sql3);
+
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -22,6 +44,7 @@
 
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/stylepro.css">
 
 </head>
 
@@ -89,6 +112,9 @@
 <!-- Header Close --> 
 
 <div class="main-wrapper ">
+<video id="background-video" autoplay style="filter:opacity(55%);" loop muted>
+	<source src="videos/rec.mp4" type="video/mp4">
+</video>
 <section class="page-title bg-1">
   <div class="container">
     <div class="row">
@@ -106,233 +132,129 @@
   </div>
 </section>
 
-<section class="section about position-relative">
-	<div class="container">
-		<div class="row">
-			<div class="offset-md-0">
-				<div class="about-item ">
-					<h2 class="mt-3 mb-4 position-relative content-title"><a href="recdoc.php">Book Reviews</a></h2>
-					<!--Marker of card-->
-					<div class="row">
-						<div class="col-xs-3 col-sm-4 col-lg-3">
-							<div class="ccontent"> <a href="#">
-									<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-									<div class="ccontent-details cfadeIn-bottom">
-										<h2 class="text-color2">Book Name</h2>
-										<h6 class="text-color2">Author name</h2>
-										<hr style="border: 2px solid white;">
-										<p class="text-color2">Book Description</p>
-									</div></a> 
-									</div>
-						</div>
-						<div class="col-xs-9 col-sm-8 col-lg-3">
 
-							<div class="ccontent"> <a href="#">
-									<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-									<div class="ccontent-details cfadeIn-bottom">
-										<h2 class="text-color2">Book Name</h2>
-										<h6 class="text-color2">Author name</h2>
-										<hr style="border: 2px solid white;">
-										<p class="text-color2">Book Description</p>
-									</div></a> 
-									</div>
-						</div>
-						<div class="col-xs-3 col-sm-4 col-lg-3">
-							<div class="ccontent"> <a href="#">
-									<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-									<div class="ccontent-details cfadeIn-bottom">
-										<h2 class="text-color2">Book Name</h2>
-										<h6 class="text-color2">Author name</h2>
-										<hr style="border: 2px solid white;">
-										<p class="text-color2">Book Description</p>
-									</div></a> 
-									</div>
-						</div>
-						<div class="col-xs-3 col-sm-4 col-lg-3">
-							<div class="ccontent"> <a href="#">
-									<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-									<div class="ccontent-details cfadeIn-bottom">
-										<h2 class="text-color2">Book Name</h2>
-										<h6 class="text-color2">Author name</h2>
-										<hr style="border: 2px solid white;">
-										<p class="text-color2">Book Description</p>
-									</div></a> 
-									</div>
-						</div>
+
+
+
+
+<section class="position-relative"><form action="docdet.php" method="post">
+		
+
+		<h2 class="mt-4 mb-4 position-relative content-title" style="margin:0 50px"><a href="recdoc.php?typ=Book Review">Book Reviews</a></h2>
+		<!--Marker of card-->
+		<div class="row" style="margin:0 50px">
+		<?php
+			$c='0';
+			while($row=mysqli_fetch_assoc($stmt)){
+		?>
+		<button class="chide" name="bname" value="<?php echo $row['b_name']; ?>" type="submit">
+		<div class="col-sm-3">
+			<div class="profile-card-6"><img src="images/book_cover/c<?php echo(rand(1,10)); ?>.jpg" class="img img-responsive">
+				<div class="profile-name"><?php echo $row['b_name']; ?></div>
+				<div class="profile-position" style="color: white;">By <?php echo $row['aut']; ?></div>
+				<div class="profile-overview">
+					<div class="text-center">
+						<?php echo $row['dscp']; ?>
 					</div>
 				</div>
 			</div>
+		</div></button>
+		<?php 
+				$c++;
+				if($c==10) break;
+			}
+		?>
 		</div>
-					 <!--Marker of card-->
-					 <div class="row">
-						<div class="offset-md-0">
-							<div class="about-item ">
-								<h2 class="mt-3 mb-4 position-relative content-title"><a href="recdoc.php">Operation Formats</a></h2>
-								<!--Marker of card-->
-								<div class="row">
-									<div class="col-xs-3 col-sm-4 col-lg-3">
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-									<div class="col-xs-9 col-sm-8 col-lg-3">
-			
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-									<div class="col-xs-3 col-sm-4 col-lg-3">
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-									<div class="col-xs-3 col-sm-4 col-lg-3">
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-								</div>
-							</div>
-						</div>
+
+
+						
+		<h2 class="mt-4 mb-4 position-relative content-title" style="margin:0 50px"><a href="recdoc.php?typ=Operation Format">Operation Formats</a></h2>
+		<!--Marker of card-->
+		<div class="row" style="margin:0 50px">
+		<?php
+			$c='0';
+			while($row1=mysqli_fetch_assoc($stmt1)){
+		?>
+		<button class="chide" name="bname" value="<?php echo $row1['b_name']; ?>" type="submit">
+		<div class="col-sm-3">
+			<div class="profile-card-6"><img src="images/book_cover/c<?php echo(rand(1,10)); ?>.jpg" class="img img-responsive">
+				<div class="profile-name"><?php echo $row1['b_name']; ?></div>
+				<div class="profile-position" style="color: white;">By <?php echo $row1['aut']; ?></div>
+				<div class="profile-overview">
+					<div class="text-center">
+						<?php echo $row1['dscp']; ?>
 					</div>
-					<div class="row">
-						<div class="offset-md-0">
-							<div class="about-item ">
-								<h2 class="mt-3 mb-4 position-relative content-title"><a href="recdoc.php">Course Documents</a></h2>
-								<!--Marker of card-->
-								<div class="row">
-									<div class="col-xs-3 col-sm-4 col-lg-3">
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-									<div class="col-xs-9 col-sm-8 col-lg-3">
-			
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-									<div class="col-xs-3 col-sm-4 col-lg-3">
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-									<div class="col-xs-3 col-sm-4 col-lg-3">
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="offset-md-0">
-							<div class="about-item ">
-								<h2 class="mt-3 mb-4 position-relative content-title"><a href="recdoc.php">Policies</a></h2>
-								<!--Marker of card-->
-								<div class="row">
-									<div class="col-xs-3 col-sm-4 col-lg-3">
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-									<div class="col-xs-9 col-sm-8 col-lg-3">
-			
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-									<div class="col-xs-3 col-sm-4 col-lg-3">
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-									<div class="col-xs-3 col-sm-4 col-lg-3">
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					</div>
+				</div>
 			</div>
+		</div></button>
+		<?php 
+				$c++;
+				if($c==10) break;
+			}
+		?>
 		</div>
-	</div>
+
+
+
+		<h2 class="mt-4 mb-4 position-relative content-title" style="margin:0 50px"><a href="recdoc.php?typ=Course Documents">Course Documents</a></h2>
+		<!--Marker of card-->
+		<div class="row" style="margin:0 50px">
+		<?php
+			$c='0';
+			while($row2=mysqli_fetch_assoc($stmt2)){
+		?>
+		<button class="chide" name="bname" value="<?php echo $row2['b_name']; ?>" type="submit">
+		<div class="col-sm-3">
+			<div class="profile-card-6"><img src="images/book_cover/c<?php echo(rand(1,10)); ?>.jpg" class="img img-responsive">
+				<div class="profile-name"><?php echo $row2['b_name']; ?></div>
+				<div class="profile-position" style="color: white;">By <?php echo $row2['aut']; ?></div>
+				<div class="profile-overview">
+					<div class="text-center">
+						<?php echo $row2['dscp']; ?>
+					</div>
+				</div>
+			</div>
+		</div></button>
+		<?php 
+				$c++;
+				if($c==10) break;
+			}
+		?>
+		</div>
+
+
+
+		<h2 class="mt-4 mb-4 position-relative content-title" style="margin:0 50px"><a href="recdoc.php?typ=Policies">Policies</a></h2>
+		<!--Marker of card-->
+		<div class="row" style="margin:0 50px">
+		<?php
+			$c='0';
+			while($row3=mysqli_fetch_assoc($stmt3)){
+		?>
+		<button class="chide" name="bname" value="<?php echo $row3['b_name']; ?>" type="submit">
+		<div class="col-sm-3">
+			<div class="profile-card-6"><img src="images/book_cover/c<?php echo(rand(1,10)); ?>.jpg" class="img img-responsive">
+				<div class="profile-name"><?php echo $row3['b_name']; ?></div>
+				<div class="profile-position" style="color: white;">By <?php echo $row3['aut']; ?></div>
+				<div class="profile-overview">
+					<div class="text-center">
+						<?php echo $row3['dscp']; ?>
+					</div>
+				</div>
+			</div>
+		</div></button>
+		<?php 
+				$c++;
+				if($c==10) break;
+			}
+		?>
+		</div>
+
+	</form>
+</section>
+
+
+
 
 <!-- footer Start -->
 <footer class="footer section">

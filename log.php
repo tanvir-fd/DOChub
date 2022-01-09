@@ -1,3 +1,32 @@
+<?php
+$servername = "localhost";
+$username = "localhost";
+$password = "1234";
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, 'doch');
+
+session_start();
+$succ=$_SESSION["succ"];
+
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+	$uname=$_POST['uname'];
+	$pass=$_POST['pass'];
+	echo $uname,$pass;
+	$sql="SELECT `name` FROM `user` WHERE p_num='$uname' AND pass='$pass'";
+	$stmt=mysqli_query($conn,$sql);
+	
+	$cot=mysqli_num_rows($stmt);
+
+	if($cot==1){
+		$_SESSION["id"]=$uname;
+		header("location: profile.php");
+	}
+	else{
+		$succ="Provide Correct Number/Password.";
+	}
+}
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -96,6 +125,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="block text-center">
+			<span class="text-color2" style="background-color: red;"><?php echo $succ; $succ=""; $_SESSION["succ"]="";?></span>
           <h1 class="text-capitalize mb-4 text-lg">Log In</h1>
           <ul class="list-inline">
             <li class="list-inline-item"><a href="index.php" class="text-white">Home</a></li>
@@ -118,19 +148,19 @@
 				</div>
 			</div>
 			<div class="card-body">
-				<form>
+				<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
 					<div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-user"></i></span>
 						</div>
-						<input type="text" class="form-control" placeholder="username">
+						<input type="text" name="uname" class="form-control" placeholder="Enter Personal Number">
 						
 					</div>
 					<div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-key"></i></span>
 						</div>
-						<input type="password" class="form-control" placeholder="password">
+						<input type="password" name="pass" class="form-control" placeholder="Enter Password">
 					</div>
 					<div class="row align-items-center remember">
 						<input type="checkbox">Remember Me

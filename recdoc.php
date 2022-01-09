@@ -1,3 +1,26 @@
+<?php
+$servername = "localhost";
+$username = "localhost";
+$password = "1234";
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, 'doch');
+
+session_start();
+
+
+if($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['type'])){
+	$type=$_POST['type'];
+}
+
+if(!empty($_GET['typ'])){
+	$type=$_GET['typ'];
+}
+
+$sql="SELECT * FROM `book` WHERE tp='$type' AND flag=1 ORDER BY `b_name` ASC";
+$stmt=mysqli_query($conn, $sql);
+
+
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -96,13 +119,13 @@
     <div class="row">
       <div class="col-md-12">
         <div class="block text-center">
-          <h1 class="text-capitalize mb-4 text-lg">Javascript Id</h1>
+          <h1 class="text-capitalize mb-4 text-lg"><?php echo $type; ?></h1>
           <ul class="list-inline">
             <li class="list-inline-item"><a href="index.php" class="text-white">Home</a></li>
             <li class="list-inline-item"><span class="text-white">/</span></li>
 			<li class="list-inline-item"><a href="resource.php" class="text-white">Resources</a></li>
             <li class="list-inline-item"><span class="text-white">/</span></li>
-            <li class="list-inline-item"><a href="#" class="text-white-50">Javascript ID</a></li>
+            <li class="list-inline-item"><a href="#" class="text-white-50"><?php echo $type; ?></a></li>
           </ul>
         </div>
       </div>
@@ -124,104 +147,32 @@
 
 <section class="cddark">
 	<div class="container py-4">
-		<h1 class="h1 text-center" id="pageHeaderTitle">[Javascript Documents] that have been completed are shown as follows</h1>
+		<h1 class="h1 text-center" id="pageHeaderTitle"><?php echo $type; ?> that have been completed are shown as follows</h1>
 
+		<?php 
+		$a="0";
+		while($row=mysqli_fetch_assoc($stmt)){
+		?>
 		
-		<form action="docdet.php" method="post"><button type="submit" value="book name" style="background: rgba(255, 255, 255, 0); border: none;">
-			<article class="postcard light red">
-				<img class="postcard__img" src="https://picsum.photos/501/500" alt="book name" />	
+		
+		<form action="docdet.php" method="post">
+			<button type="submit" name="bname" value="<?php echo $row['b_name'] ?>" style="background: rgba(255, 255, 255, 0); border: none;">
+			<?php if($a==0){ ?><article class="postcard light red"><?php } else {?> <article class="postcard dark blue"> <?php } ?>
+			
+				<img class="postcard__img" src="images/book_cover/c<?php echo(rand(1,10)); ?>.jpg" alt="<?php echo $row['b_name']; ?>" />	
 				
-				<div class="postcard__text t-dark">
-					<h1 class="postcard__title red"><a href="#">Podcast Title</a></h1>
+				<div class="postcard__text <?php if($a==0){ ?>t-dark<?php } ?>" style="width:900px;">
+					<h1 class="postcard__title <?php if($a==0){ ?>red<?php $a='1'; } else $a='0'; ?>"><?php echo $row['b_name']; ?></h1>
 					<div class="postcard__subtitle small">
-						Author name
+					<?php echo $row['aut']; ?>
 					</div>
 					<div class="postcard__bar"></div>
-					<div class="postcard__preview-txt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugiat asperiores inventore beatae accusamus odit minima enim, commodi quia, doloribus eius! Ducimus nemo accusantium maiores velit corrupti tempora reiciendis molestiae repellat vero. Eveniet ipsam adipisci illo iusto quibusdam, sunt neque nulla unde ipsum dolores nobis enim quidem excepturi, illum quos!</div>
-					
-				</div>
-			</article></button>
-			<button type="submit" value="book name" style="background: rgba(255, 255, 255, 0); border: none;">
-			<article class="postcard dark blue">
-				<img class="postcard__img" src="https://picsum.photos/1000/1000" alt="Image Title" />
-				
-				<div class="postcard__text">
-					<h1 class="postcard__title"><a href="#">Podcast Title</a></h1>
-					<div class="postcard__subtitle small">
-						Author name
-					</div>
-					<div class="postcard__bar"></div>
-					<div class="postcard__preview-txt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugiat asperiores inventore beatae accusamus odit minima enim, commodi quia, doloribus eius! Ducimus nemo accusantium maiores velit corrupti tempora reiciendis molestiae repellat vero. Eveniet ipsam adipisci illo iusto quibusdam, sunt neque nulla unde ipsum dolores nobis enim quidem excepturi, illum quos!</div>
+					<div class="postcard__preview-txt"><?php echo $row['dscp']; ?></div>
 					
 				</div>
 			</article></button>
 		</form>
-		<!--article class="postcard dark red">
-			<a class="postcard__img_link acd" href="#">
-				<img class="postcard__img" src="https://picsum.photos/501/500" alt="Image Title" />	
-			</a>
-			<div class="postcard__text">
-				<h1 class="postcard__title red"><a href="#">Podcast Title</a></h1>
-				<div class="postcard__subtitle small">
-					<time datetime="2020-05-25 12:00:00">
-						<i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
-					</time>
-				</div>
-				<div class="postcard__bar"></div>
-				<div class="postcard__preview-txt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugiat asperiores inventore beatae accusamus odit minima enim, commodi quia, doloribus eius! Ducimus nemo accusantium maiores velit corrupti tempora reiciendis molestiae repellat vero. Eveniet ipsam adipisci illo iusto quibusdam, sunt neque nulla unde ipsum dolores nobis enim quidem excepturi, illum quos!</div>
-				<ul class="postcard__tagbox">
-					<li class="tag__item"><i class="fas fa-tag mr-2"></i>Podcast</li>
-					<li class="tag__item"><i class="fas fa-clock mr-2"></i>55 mins.</li>
-					<li class="tag__item play red">
-						<a href="#"><i class="fas fa-play mr-2"></i>Play Episode</a>
-					</li>
-				</ul>
-			</div>
-		</article>
-		<article class="postcard dark green">
-			<a class="postcard__img_link acd" href="#">
-				<img class="postcard__img" src="https://picsum.photos/500/501" alt="Image Title" />
-			</a>
-			<div class="postcard__text">
-				<h1 class="postcard__title green"><a href="#">Podcast Title</a></h1>
-				<div class="postcard__subtitle small">
-					<time datetime="2020-05-25 12:00:00">
-						<i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
-					</time>
-				</div>
-				<div class="postcard__bar"></div>
-				<div class="postcard__preview-txt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugiat asperiores inventore beatae accusamus odit minima enim, commodi quia, doloribus eius! Ducimus nemo accusantium maiores velit corrupti tempora reiciendis molestiae repellat vero. Eveniet ipsam adipisci illo iusto quibusdam, sunt neque nulla unde ipsum dolores nobis enim quidem excepturi, illum quos!</div>
-				<ul class="postcard__tagbox">
-					<li class="tag__item"><i class="fas fa-tag mr-2"></i>Podcast</li>
-					<li class="tag__item"><i class="fas fa-clock mr-2"></i>55 mins.</li>
-					<li class="tag__item play green">
-						<a href="#"><i class="fas fa-play mr-2"></i>Play Episode</a>
-					</li>
-				</ul>
-			</div>
-		</article>
-		<article class="postcard dark yellow">
-			<a class="postcard__img_link acd" href="#">
-				<img class="postcard__img" src="https://picsum.photos/501/501" alt="Image Title" />
-			</a>
-			<div class="postcard__text">
-				<h1 class="postcard__title yellow"><a href="#">Podcast Title</a></h1>
-				<div class="postcard__subtitle small">
-					<time datetime="2020-05-25 12:00:00">
-						<i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
-					</time>
-				</div>
-				<div class="postcard__bar"></div>
-				<div class="postcard__preview-txt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugiat asperiores inventore beatae accusamus odit minima enim, commodi quia, doloribus eius! Ducimus nemo accusantium maiores velit corrupti tempora reiciendis molestiae repellat vero. Eveniet ipsam adipisci illo iusto quibusdam, sunt neque nulla unde ipsum dolores nobis enim quidem excepturi, illum quos!</div>
-				<ul class="postcard__tagbox">
-					<li class="tag__item"><i class="fas fa-tag mr-2"></i>Podcast</li>
-					<li class="tag__item"><i class="fas fa-clock mr-2"></i>55 mins.</li>
-					<li class="tag__item play yellow">
-						<a href="#"><i class="fas fa-play mr-2"></i>Play Episode</a>
-					</li>
-				</ul>
-			</div>
-		</article-->
+		<?php } ?>
 	</div>
 </section>
 

@@ -1,3 +1,38 @@
+<?php
+$servername = "localhost";
+$username = "localhost";
+$password = "1234";
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, 'doch');
+
+session_start();
+
+$sql5="SELECT * FROM `book` WHERE tp='Book Review' AND flag!=1 ORDER BY `time`";
+$stmt5=mysqli_query($conn,$sql5);
+
+$sql1="SELECT * FROM `book` WHERE tp='Operation Format' AND flag=0 ORDER BY `time`";
+$stmt1=mysqli_query($conn,$sql1);
+
+$sql2="SELECT * FROM `book` WHERE tp='Course Documents' AND flag=0 ORDER BY `time`";
+$stmt2=mysqli_query($conn,$sql2);
+
+$sql3="SELECT * FROM `book` WHERE tp='Policies' AND flag=0 ORDER BY `time`";
+$stmt3=mysqli_query($conn,$sql3);
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+	$name=$_POST['b_name'];
+	$tp=$_POST['type'];
+	$aut=$_POST['aut'];
+	$dscp=$_POST['dscp'];
+	$pic=$_POST['pic'];
+	$id=$_SESSION['id'];
+	
+	$one="INSERT INTO `book`(`b_name`, `tp`, `aut`, `pic`, `r_by`, `dscp`) VALUES ('$name','$tp','$aut','book1.jpg','$id','$dscp')";
+	$two=mysqli_query($conn,$one);
+
+}
+
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -22,6 +57,7 @@
 
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/stylepro.css">
 
 </head>
 
@@ -91,6 +127,9 @@
 <!-- Header Close --> 
 
 <div class="main-wrapper ">
+<video id="background-video" style="filter:opacity(55%);" autoplay loop muted poster="https://assets.codepen.io/6093409/river.jpg">
+	<source src="videos/req.mp4" type="video/mp4">
+</video>
 <section class="page-title bg-2">
   <div class="container">
     <div class="row">
@@ -108,342 +147,181 @@
   </div>
 </section>
 
+<?php
 
-<section class="section about position-relative">
-	<div class="container">
-		<div class="splr">
-			<div class="offset-md-0">
-				<div class="about-item ">
-					<h2 class="mt-3 mb-4 position-relative content-title"><a href="reqdoc.php">Book Reviews</a></h2>
-					<!--Marker of card-->
-					<div class="row">
-						<div class="col-xs-3 col-sm-3 col-lg-3">
-								<div class="profile-card-6"><img src="http://envato.jayasankarkr.in/code/profile/assets/img/profile-6.jpg" class="img img-responsive">
-									<div class="profile-name">JOHN
-										<br>DOE</div>
-									<div class="profile-position">Lorem Ipsum Donor</div>
-									<div class="profile-overview">
-										
-											<div class="text-center">
-												Description
-											</div>
-										
-									</div>
-								</div>
-							</div>
-						
-						
-						
-						<div class="col-xs-3 col-sm-3 col-lg-3">
-								<div class="profile-card-6"><img src="http://envato.jayasankarkr.in/code/profile/assets/img/profile-6.jpg" class="img img-responsive">
-									<div class="profile-name">JOHN
-										<br>DOE</div>
-									<div class="profile-position">Lorem Ipsum Donor</div>
-									<div class="profile-overview">
-										<div class="profile-overview">
-											<div class="row text-center">
-												<div class="col-xs-4">
-													<h3>1</h3>
-													<p>Rank</p>
-												</div>
-												<div class="col-xs-4">
-													<h3>50</h3>
-													<p>Matches</p>
-												</div>
-												<div class="col-xs-4">
-													<h3>35</h3>
-													<p>Goals</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						
+$id=$_SESSION["id"];
+$sql="SELECT * FROM `user` WHERE p_num='$id'";
+$stmt=mysqli_query($conn, $sql);
 
+$cot=mysqli_num_rows($stmt);
 
-						<div class="col-xs-3 col-sm-3 col-lg-3">
-								<div class="profile-card-6"><img src="http://envato.jayasankarkr.in/code/profile/assets/img/profile-6.jpg" class="img img-responsive">
-									<div class="profile-name">JOHN
-										<br>DOE</div>
-									<div class="profile-position">Lorem Ipsum Donor</div>
-									<div class="profile-overview">
-										<div class="profile-overview">
-											<div class="row text-center">
-												<div class="col-xs-4">
-													<h3>1</h3>
-													<p>Rank</p>
-												</div>
-												<div class="col-xs-4">
-													<h3>50</h3>
-													<p>Matches</p>
-												</div>
-												<div class="col-xs-4">
-													<h3>35</h3>
-													<p>Goals</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						
+	if($cot==1){
+?>
+<div class="row">
+	<div class="container position-relative">
+		<div class="card" style="padding: 10px 50px; background-color: rgba(250, 186, 126, 0.562);">
+			<div class="container-fliud">
+				<h6 style="text-align: center;font-weight: bold;font-size: x-large;">New file Request</h6>
+				<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="mt-3 mb-3">
+					<span class="row">
+						<h6 class="col-sm-2 pt-2">Document's Name:</h6>
+						<input class="col-sm-4" name="b_name" type="text" placeholder="Enter Document's Name">
+						<h6 class="col-sm-2 pt-2">Document's Writer:</h6>
+						<input class="col-sm-4" name="aut" type="text" placeholder="Enter Writer's Name">
+					</span>
+					<span class="row mt-3">
+						<span class="col-sm-6">
+							<span class="row">
+								<h6 class="col-sm-4 pt-2">Document's Description:</h6>
+								<input class="col-sm-8" name="dscp" type="text" placeholder="Enter Document's Description">
+							</span>
+							<span class="row mt-3">
+								<h6 class="col-sm-4 pt-2">Document's Type:</h6>
+								<select name="type" id="type">  
+									<option value="Book Review"> Book Review </option>  
+									<option value="Operation Format"> Operation Format </option>  
+									<option value="Course Documents"> Course Documents </option>  
+									<option value="Policies"> Policies </option>  
+								</select>
+							</span>
+						</span>
+						<span class="col-sm-6">
+							<span class="row">
+								<h6 class="col-sm-4 pt-2">Upload<br>Document's Cover:</h6>
+								<input class="col-sm-8" name="pic" Style="width: 800px; border: dotted 4px rgb(117, 34, 14);padding:10px;" type="file">
+							</span>
+							<span class="row mt-3">
+								<span class="col-sm-6"></span>
+								<button class="col-sm-6 btn btn-success pl-1 pr-1" type="submit">REQUEST</button>
+							</span>
+						</span>
+					</span>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 
+<?php } ?>
 
-						<div class="col-xs-3 col-sm-3 col-lg-3">
-								<div class="profile-card-6"><img src="http://envato.jayasankarkr.in/code/profile/assets/img/profile-6.jpg" class="img img-responsive">
-									<div class="profile-name">JOHN
-										<br>DOE</div>
-									<div class="profile-position">Lorem Ipsum Donor</div>
-									<div class="profile-overview">
-										<div class="profile-overview">
-											<div class="row text-center">
-												<div class="col-xs-4">
-													<h3>1</h3>
-													<p>Rank</p>
-												</div>
-												<div class="col-xs-4">
-													<h3>50</h3>
-													<p>Matches</p>
-												</div>
-												<div class="col-xs-4">
-													<h3>35</h3>
-													<p>Goals</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+<section class="position-relative"><form action="docdet.php" method="post">
+		
 
-
-						
-					 <!--Marker of card-->
-					 <div class="row">
-						<div class="offset-md-0">
-							<div class="about-item ">
-								<h2 class="mt-3 mb-4 position-relative content-title"><a href="reqdoc.php">Operation Formats</a></h2>
-								<!--Marker of card-->
-								<div class="row">
-									<div class="col-xs-3 col-sm-3 col-lg-3">
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-									<div class="col-xs-3 col-sm-3 col-lg-3">
-			
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-									<div class="col-xs-3 col-sm-3 col-lg-3">
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-									<div class="col-xs-3 col-sm-3 col-lg-3">
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="offset-md-0">
-							<div class="about-item ">
-								<h2 class="mt-3 mb-4 position-relative content-title"><a href="reqdoc.php">Course Documents</a></h2>
-								<!--Marker of card-->
-								<div class="row">
-									<div class="col-xs-3 col-sm-3 col-lg-3">
-											<div class="profile-card-6"><img src="http://envato.jayasankarkr.in/code/profile/assets/img/profile-6.jpg" class="img img-responsive">
-												<div class="profile-name">JOHN
-													<br>DOE</div>
-												<div class="profile-position">Lorem Ipsum Donor</div>
-												<div class="profile-overview">
-													
-														<div class="text-center">
-															Description
-														</div>
-													
-												</div>
-											</div>
-										</div>
-									
-									
-									
-									<div class="col-xs-3 col-sm-3 col-lg-3">
-											<div class="profile-card-6"><img src="http://envato.jayasankarkr.in/code/profile/assets/img/profile-6.jpg" class="img img-responsive">
-												<div class="profile-name">JOHN
-													<br>DOE</div>
-												<div class="profile-position">Lorem Ipsum Donor</div>
-												<div class="profile-overview">
-													<div class="profile-overview">
-														<div class="row text-center">
-															<div class="col-xs-4">
-																<h3>1</h3>
-																<p>Rank</p>
-															</div>
-															<div class="col-xs-4">
-																<h3>50</h3>
-																<p>Matches</p>
-															</div>
-															<div class="col-xs-4">
-																<h3>35</h3>
-																<p>Goals</p>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									
-			
-			
-									<div class="col-xs-3 col-sm-3 col-lg-3">
-											<div class="profile-card-6"><img src="http://envato.jayasankarkr.in/code/profile/assets/img/profile-6.jpg" class="img img-responsive">
-												<div class="profile-name">JOHN
-													<br>DOE</div>
-												<div class="profile-position">Lorem Ipsum Donor</div>
-												<div class="profile-overview">
-													<div class="profile-overview">
-														<div class="row text-center">
-															<div class="col-xs-4">
-																<h3>1</h3>
-																<p>Rank</p>
-															</div>
-															<div class="col-xs-4">
-																<h3>50</h3>
-																<p>Matches</p>
-															</div>
-															<div class="col-xs-4">
-																<h3>35</h3>
-																<p>Goals</p>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									
-			
-			
-									<div class="col-xs-3 col-sm-3 col-lg-3">
-											<div class="profile-card-6"><img src="http://envato.jayasankarkr.in/code/profile/assets/img/profile-6.jpg" class="img img-responsive">
-												<div class="profile-name">JOHN
-													<br>DOE</div>
-												<div class="profile-position">Lorem Ipsum Donor</div>
-												<div class="profile-overview">
-													<div class="profile-overview">
-														<div class="row text-center">
-															<div class="col-xs-4">
-																<h3>1</h3>
-																<p>Rank</p>
-															</div>
-															<div class="col-xs-4">
-																<h3>50</h3>
-																<p>Matches</p>
-															</div>
-															<div class="col-xs-4">
-																<h3>35</h3>
-																<p>Goals</p>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="offset-md-0">
-							<div class="about-item ">
-								<h2 class="mt-3 mb-4 position-relative content-title"><a href="reqdoc.php">Policies</a></h2>
-								<!--Marker of card-->
-								<div class="row">
-									<div class="col-xs-3 col-sm-3 col-lg-3">
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-									<div class="col-xs-3 col-sm-3 col-lg-3">
-			
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-									<div class="col-xs-3 col-sm-3 col-lg-3">
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-									<div class="col-xs-3 col-sm-3 col-lg-3">
-										<div class="ccontent"> <a href="#">
-												<div class="ccontent-overlay"></div> <img class="ccontent-image" src="https://i.imgur.com/7cNRozs.jpg">
-												<div class="ccontent-details cfadeIn-bottom">
-													<h2 class="text-color2">Book Name</h2>
-													<h6 class="text-color2">Author name</h2>
-													<hr style="border: 2px solid white;">
-													<p class="text-color2">Book Description</p>
-												</div></a> 
-												</div>
-									</div>
-								</div>
-							</div>
-						</div>
+		<h2 class="mt-4 mb-4 position-relative content-title" style="margin:0 50px"><a href="reqdoc.php?typ=Book Review">Book Reviews</a></h2>
+		<!--Marker of card-->
+		<div class="row" style="margin:0 50px">
+		<?php
+			$c='0';
+			while($row5=mysqli_fetch_assoc($stmt5)){
+		?>
+		<button class="chide" name="bname" value="<?php echo $row5['b_name']; ?>" type="submit">
+		<div class="col-sm-3">
+			<div class="profile-card-6"><img src="images/book_cover/c<?php echo(rand(1,10)); ?>.jpg" class="img img-responsive">
+				<div class="profile-name"><?php echo $row5['b_name']; ?></div>
+				<div class="profile-position" style="color: white;">By <?php echo $row5['aut']; ?></div>
+				<div class="profile-overview">
+					<div class="text-center">
+						<?php echo $row5['dscp']; ?>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+		</button>
+		<?php 
+				$c++;
+				if($c==10) break;
+			}
+		?>
+		</div>
 
+
+						
+		<h2 class="mt-4 mb-4 position-relative content-title" style="margin:0 50px"><a href="reqdoc.php?typ=Operation Format">Operation Formats</a></h2>
+		<!--Marker of card-->
+		<div class="row" style="margin:0 50px">
+		<?php
+			$c='0';
+			while($row1=mysqli_fetch_assoc($stmt1)){
+		?>
+		<button class="chide" name="bname" value="<?php echo $row1['b_name']; ?>" type="submit">
+		<div class="col-sm-3">
+			<div class="profile-card-6"><img src="images/book_cover/c<?php echo(rand(1,10)); ?>.jpg" class="img img-responsive">
+				<div class="profile-name"><?php echo $row1['b_name']; ?></div>
+				<div class="profile-position" style="color: white;">By <?php echo $row1['aut']; ?></div>
+				<div class="profile-overview">
+					<div class="text-center">
+						<?php echo $row1['dscp']; ?>
+					</div>
+				</div>
+			</div>
+		</div></button>
+		<?php 
+				$c++;
+				if($c==10) break;
+			}
+		?>
+		</div>
+
+
+
+		<h2 class="mt-4 mb-4 position-relative content-title" style="margin:0 50px"><a href="reqdoc.php?typ=Course Documents">Course Documents</a></h2>
+		<!--Marker of card-->
+		<div class="row" style="margin:0 50px">
+		<?php
+			$c='0';
+			while($row2=mysqli_fetch_assoc($stmt2)){
+		?>
+		<button class="chide" name="bname" value="<?php echo $row2['b_name']; ?>" type="submit">
+		<div class="col-sm-3">
+			<div class="profile-card-6"><img src="images/book_cover/c<?php echo(rand(1,10)); ?>.jpg" class="img img-responsive">
+				<div class="profile-name"><?php echo $row2['b_name']; ?></div>
+				<div class="profile-position" style="color: white;">By <?php echo $row2['aut']; ?></div>
+				<div class="profile-overview">
+					<div class="text-center">
+						<?php echo $row2['dscp']; ?>
+					</div>
+				</div>
+			</div>
+		</div></button>
+		<?php 
+				$c++;
+				if($c==10) break;
+			}
+		?>
+		</div>
+
+
+
+		<h2 class="mt-4 mb-4 position-relative content-title" style="margin:0 50px"><a href="reqdoc.php?typ=Policies">Policies</a></h2>
+		<!--Marker of card-->
+		<div class="row" style="margin:0 50px">
+		<?php
+			$c='0';
+			while($row3=mysqli_fetch_assoc($stmt3)){
+		?>
+		<div class="col-sm-3">
+		<button class="chide" name="bname" value="<?php echo $row3['b_name']; ?>" type="submit">
+			<div class="profile-card-6"><img src="images/book_cover/c<?php echo(rand(1,10)); ?>.jpg" class="img img-responsive">
+				<div class="profile-name"><?php echo $row3['b_name']; ?></div>
+				<div class="profile-position" style="color: white;">By <?php echo $row3['aut']; ?></div>
+				<div class="profile-overview">
+					<div class="text-center">
+						<?php echo $row3['dscp']; ?>
+					</div>
+				</div>
+			</div>
+		</div></button>
+		<?php 
+				$c++;
+				if($c==10) break;
+			}
+		?>
+		</div>
+
+<form>
 </section>
+
+
 <!-- footer Start -->
 <footer class="footer section">
 	<div class="container">

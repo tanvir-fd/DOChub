@@ -24,6 +24,30 @@
   <link rel="stylesheet" href="css/style.css">
 
 </head>
+<?php
+$servername = "localhost";
+$username = "localhost";
+$password = "1234";
+$db = "doch";
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $db);
+session_start();
+
+$sql="SELECT * FROM `user`";
+$stmt=mysqli_query($conn,$sql);
+$c_u=mysqli_num_rows($stmt);
+
+$sql2="SELECT * FROM `d_count`";
+$stmt2=mysqli_query($conn,$sql2);
+$c_d=mysqli_num_rows($stmt2);
+
+$sql3="SELECT * FROM `repo`,`book`";
+$stmt3=mysqli_query($conn,$sql3);
+$c_f=mysqli_num_rows($stmt3);
+
+$sql1="SELECT `pic`, b_name ,`dscp` FROM `book` ORDER BY time DESC";
+$stmt1=mysqli_query($conn,$sql1);
+?>
 
 <body>
 
@@ -115,7 +139,7 @@
 		<div class="row justify-content-center font-weight-bold">
 			<div class="col-lg-3 col-md-3 col-sm-6">
 				<form action="recdoc.php" method="post">
-				<button type="submit" value="Book Review" style="background: rgba(255, 255, 255, 0); border: none;">
+				<button type="submit" name="type" value="Book Review" style="background: rgba(255, 255, 255, 0); border: none;">
 				<div class="card intro-item mb-5 mb-lg-0 zoom" style="padding:20px 30px; height: 350px; background-color: rgba(0, 0, 0, 0.16);border-radius: 5px; box-shadow: 5px 5px 10px black; border-color: black; border-width: 1px;"> 
 					<i class="ti-pencil color-two"></i>
 					<h4 class="mt-4 mb-3 font-weight-bold">Book Review</h4>
@@ -124,7 +148,7 @@
 			</div>
 			<div class="col-lg-3 col-md-3 col-sm-6">
 				<form action="recdoc.php" method="post">
-				<button type="submit" value="Operation Formats" style="background: rgba(255, 255, 255, 0); border: none;">
+				<button type="submit" name="type" value="Operation Formats" style="background: rgba(255, 255, 255, 0); border: none;">
 				<div class="card intro-item mb-5 mb-lg-0 zoom" style="padding:20px 30px; height: 350px; background-color: rgba(0, 0, 0, 0.16);border-radius: 5px; box-shadow: 5px 5px 10px black; border-color: black; border-width: 1px;"> 
 					<i class="ti-map-alt" style="color: rgb(201, 0, 0);"></i> 
 					<h4 class="mt-4 mb-3">Operation Formats</h4>
@@ -133,7 +157,7 @@
 			</div>
 			<div class="col-lg-3 col-md-3 col-sm-6">
 				<form action="recdoc.php" method="post">
-				<button type="submit" value="Course Document" style="background: rgba(255, 255, 255, 0); border: none;">
+				<button type="submit" name="type" value="Course Document" style="background: rgba(255, 255, 255, 0); border: none;">
 				<div class="card intro-item mb-5 mb-lg-0 zoom" style="padding:20px 30px; height: 350px;overflow: hidden; background-color: rgba(0, 0, 0, 0.16);border-radius: 5px; box-shadow: 5px 5px 10px black; border-color: black; border-width: 1px;"> 
 					<i class="ti-layers-alt color-one"></i>
 					<h4 class="mt-4 mb-3">Course Documents</h4>
@@ -142,7 +166,7 @@
 			</div> 
 			<div class="col-lg-3 col-md-3 col-sm-6">
 				<form action="recdoc.php" method="post">
-				<button type="submit" value="Policies" style="background: rgba(255, 255, 255, 0); border: none;">
+				<button type="submit" name="type" value="Policies" style="background: rgba(255, 255, 255, 0); border: none;">
 				<div class="card intro-item mb-5 mb-lg-0 zoom" style="padding:20px 30px; height: 350px; background-color: rgba(0, 0, 0, 0.16);border-radius: 5px; box-shadow: 5px 5px 10px black; border-color: black; border-width: 1px;"> 
 					<i class="ti-layers color-four"></i>
 					<h4 class="mt-4 mb-3">Policies</h4>
@@ -175,7 +199,6 @@
 		</div>
 	</div>
 </section>
-
 <!-- Section About End -->
 <!-- section Counter Start -->
 <section class="section counter bg-counter">
@@ -184,21 +207,21 @@
 			<div class="col-lg-3 col-md-6 col-sm-6">
 				<div class="counter-item text-center mb-5 mb-lg-0">
 					<i class="ti-bookmark-alt color-one text-md"></i>
-					<h3 class="mb-0 text-color2"><span class="counter-stat font-weight-bold">1730</span> +</h3>
+					<h3 class="mb-0 text-color2"><span class="counter-stat font-weight-bold"><?php echo $c_f; ?></span> +</h3>
 					<p class="text-muted">Documents Onboard</p>
 				</div>
 			</div>
 			<div class="col-lg-3 col-md-6 col-sm-6">
 				<div class="counter-item text-center mb-5 mb-lg-0">
 					<i class="ti-user color-one text-md"></i>
-					<h3 class="mb-0 text-color2"><span class="counter-stat font-weight-bold">125 </span>M </h3>
+					<h3 class="mb-0 text-color2"><span class="counter-stat font-weight-bold"><?php echo $c_u; ?> </span>k </h3>
 					<p class="text-muted">Contributers</p>
 				</div>
 			</div>
 			<div class="col-lg-3 col-md-6 col-sm-6">
 				<div class="counter-item text-center mb-5 mb-lg-0">
 					<i class="ti-save color-one text-md"></i>
-					<h3 class="mb-0 text-color2"><span class="counter-stat font-weight-bold">39</span></h3>
+					<h3 class="mb-0 text-color2"><span class="counter-stat font-weight-bold"><?php echo $c_d; ?></span></h3>
 					<p class="text-muted">Downloaded</p>
 				</div>
 			</div>
@@ -213,40 +236,6 @@
 	</div>
 </section>
 
-<!-- Section Testimonial Start -->
-<section class="section testimonial">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-7 ">
-				<div class="section-title">
-					<h2 class="mt-3 content-title text-color">Check what's trending</h2>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="container">
-		<div class="row testimonial-wrap">
-			<!--iteration start-->
-			<div class="testimonial-item position-relative">
-				<i class="ti-quote-left text-color"></i>
-
-				<div class="testimonial-item-content">
-					<form action="docdet.php" method="post"><button type="submit" value="Policies" style="background: rgba(255, 255, 255, 0); border: none;"><p style="font-weight: bold;font-size: xx-large;">Header Link</p>DETAILS
-					</button></form>
-					<div class="testimonial-author">
-						<h5 class="mb-0 text-capitalize">Author name</h5>
-						<p>Designation/course number</p>
-					</div>
-				</div>
-			</div>
-			<!--iteration end-->
-			</div>
-		</div>
-	</div>
-</section>
-<!-- Section Testimonial End -->
-
 <section class="mt-70 position-relative">
 	<div class="container">
 	<div class="cta-block-2 bg-gray p-5 rounded border-1 bg-dark">
@@ -256,7 +245,7 @@
 				<h2 class="mt-2 mb-4 mb-lg-0 text-color2">Search here to find your document.<br>In return, upload documents you have.<br>Help yourselves and help others.</h2>
 			</div>
 			<div class="col-lg-4">
-				<a href="req.php" class="btn btn-main btn-round-full float-lg-right ">Upload Document</a>
+				<a href="req.html" class="btn btn-main btn-round-full float-lg-right ">Upload Document</a>
 			</div>
 		</div>
 	</div>
@@ -264,7 +253,59 @@
 
 </section>
 
+<!-- Section Testimonial Start -->
+<section class="section testimonial">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="section-title">
+					<h2 class="mt-3 content-title text-color" style="text-align:center;">Check what's trending</h2>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+	
+	
+	
+	
+	
+	
+	<div class="row">
+	<div class="container my-4">
+<div id="carouselExample1" class="carousel slide z-depth-1-half" data-ride="carousel">
+  <div class="carousel-inner">
+	  <?php
+	  	$a=1;
+		  while($a<9 && $row=mysqli_fetch_assoc($stmt1)){
+	  ?>
+	  <!--iter-->
+	<div class="carousel-item <?php if($a==1){ ?>active<?php } ?>">
+	  <img class="d-block w-100" style="max-height: 600px;" src="images/book_cover/c<?php echo $a; ?>.jpg" alt="<?php echo $row['b_name']; ?>">
+	  <div class="carousel-caption d-none d-md-block" style="background:rgba(0, 0, 0, 0.66);">
+    	<a class="mb-3" href="docdet.php?bn=<?php echo $row['b_name']; ?>" style="color: white; font-size:50px; font-weight:bold;"><?php echo $row['b_name']; ?></a>
+    	<p style="font-size:20px;"><?php echo $row['dscp']; ?></p>
+  		</div>
+	</div>
+	<?php $a++; } ?>
+  <a class="carousel-control-prev" href="#carouselExample1" role="button" data-slide="prev">
+	<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+	<span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExample1" role="button" data-slide="next">
+	<span class="carousel-control-next-icon" aria-hidden="true"></span>
+	<span class="sr-only">Next</span>
+  </a>
+</div>
+
+
+</div>
+	</div>
+</section>
+
 <!-- footer Start -->
+<hr>
 <footer class="footer section">
 	<div class="container">
 		<div class="row">

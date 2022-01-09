@@ -1,3 +1,40 @@
+<?php
+$servername = "localhost";
+$username = "localhost";
+$password = "1234";
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, 'doch');
+$err="";
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+ 
+  
+  $p_num=$_POST['p_num'];
+  $rk=$_POST['rk'];
+  $course=$_POST['course'];
+  $name=$_POST['name'];
+  $mob=$_POST['mob'];
+  $em=$_POST['em'];
+  $adds=$_POST['adds'];
+  $dob=$_POST['dob'];
+  $pic=$_POST['pic'];
+  $pass=$_POST['pass'];
+  $sql = "INSERT INTO `user`  VALUES ('$p_num','$rk','$name','$pic','$mob','$em','$adds','$dob','0','0','$pass')";
+  $stmt= mysqli_query($conn, $sql); 
+  
+  session_start();
+  $_SESSION["succ"]="Account created Successfully!!";
+  
+
+  if($stmt){
+      // Redirect to login page
+      header("location: log.php?");
+    } else{
+        $err="Oops! Something went wrong. Please try again later.";
+    }
+}
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -102,16 +139,18 @@
             <li class="list-inline-item"><span class="text-white">/</span></li>
             <li class="list-inline-item"><a href="#" class="text-white-50">Sign Up</a></li>
           </ul>
+          <span class="text-color2" style="background-color: red;"><?php echo $err; ?></span>
+  
         </div>
       </div>
     </div>
   </div>
 
-
+      
   <div class="container">
     <!--Grid row-->
     <div class="row mt-5">
-      <!--Grid column-->
+    <!--Grid column-->
       <div class="col-md-6 mb-5 mt-md-0 mt-5 white-text text-center text-md-left">
         <h1 class="h1-responsive font-weight-bold wow fadeInLeft text-color2" data-wow-delay="0.3s">Sign up right now! </h1>
         <hr class="hr-light wow fadeInLeft" data-wow-delay="0.3s">
@@ -130,39 +169,71 @@
               <hr class="hr-light">
             </div>
             <!--Body-->
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="md-form">
                 <i class="fa fa-id-card prefix white-text active"></i>
-                <input type="text" id="form3" class="white-text form-control">
+                <input type="text" name="p_num" id="form3" class="white-text form-control">
                 <label for="form3" class="active">Your Personal Number</label>
             </div>
-            
+            <div class="md-form">
+                <i class="fa fa-id-card prefix white-text active"></i>
+                <input type="text" name="rk" id="form3" class="white-text form-control">
+                <label for="form3" class="active">Your Rank</label>
+            </div>
             <div class="md-form">
               <i class="fa fa-user prefix white-text active"></i>
-              <input type="text" id="form3" class="white-text form-control">
+              <input type="text" name="name" id="form3" class="white-text form-control">
               <label for="form3" class="active">Your name</label>
             </div>
             <div class="md-form">
                 <i class="fa fa-info-circle prefix white-text active"></i>
-                <input type="text" id="form3" class="white-text form-control">
+                <input type="text" name="course" id="form3" class="white-text form-control">
                 <label for="form3" class="active">Your Course Number (eg. 38 BMA SPL)</label>
             </div>
             <div class="md-form">
+                <i class="fa fa-info-circle prefix white-text active"></i>
+                <input type="date" name="dob" id="form3" class="white-text form-control">
+                <label for="form3" class="active">Your Birthday</label>
+            </div>
+            <div class="md-form">
               <i class="fa fa-envelope prefix white-text active"></i>
-              <input type="email" id="form2" class="white-text form-control">
+              <input type="email" name="em" id="form2" class="white-text form-control">
               <label for="form2" class="active">Your email address</label>
             </div>
             <div class="md-form">
+              <i class="fa fa-envelope prefix white-text active"></i>
+              <input type="text" name="mob" id="form2" class="white-text form-control">
+              <label for="form2" class="active">Your mobile number</label>
+            </div>
+            <div class="md-form">
+              <i class="fa fa-user prefix white-text active"></i>
+              <input type="text" name="adds" id="form3" class="white-text form-control">
+              <label for="form3" class="active">Your Address</label>
+            </div>
+            <div class="md-form">
               <i class="fa fa-lock prefix white-text active"></i>
-              <input type="password" id="form4" class="white-text form-control">
+              <input type="password" name="pass" id="form4" class="white-text form-control">
               <label for="form4">Your password</label>
+            </div>
+            <div class="md-form">
+              <i class="fa fa-lock prefix white-text active"></i>
+              <input type="password" name="cfmpass" id="form4" class="white-text form-control">
+              <label for="form4">Confirm Your password</label>
+            </div>
+            <div class="md-form">
+              <i class="fa fa-lock prefix white-text active"></i>
+              <input type="text" name="pic" id="form4" class="white-text form-control">
+              <label for="form4">Your Picture</label>
             </div>
             <div class="text-center mt-4">
               <button type="submit" value="submit" class="btn btn-success">Sign up</button>
+              
               <hr class="hr-light mb-3 mt-4">
               <a href="log.php"><button type="button" class="btn btn-danger">Back to Log In</button></a>
             </div>
           </div>
         </div>
+        </form>
         <!--/.Form-->
       </div>
 </section>

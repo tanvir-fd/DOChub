@@ -1,3 +1,41 @@
+<?php
+  session_start();
+  $servername = "localhost";
+$username = "localhost";
+$password = "1234";
+$db = "doch";
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $db);
+
+
+$id=$_SESSION["id"];
+$sql="SELECT * FROM `user` WHERE p_num='$id'";
+$stmt=mysqli_query($conn, $sql);
+
+$cot=mysqli_num_rows($stmt);
+
+	if($cot==1){
+    $row=mysqli_fetch_assoc($stmt);
+  }
+else{
+  $_SESSION["succ"]="Sign in at first.";
+  header("location: log.php");
+}
+
+
+
+$sql="SELECT * FROM `repo` WHERE u_by='$id' ORDER BY `time` DESC";
+$stmt=mysqli_query($conn, $sql);
+$cot=mysqli_num_rows($stmt);
+
+
+$sql1="SELECT sum(rate) as s_rt FROM `repo` WHERE u_by='$id'";
+$stmt1=mysqli_query($conn, $sql1);
+$row2=mysqli_fetch_assoc($stmt1);
+
+?>
+
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -90,7 +128,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="block text-center">
-          <h1 class="text-capitalize mb-4 text-lg">Hi [person's name]!</h1>
+          <h1 class="text-capitalize mb-4 text-lg">Hi <?php echo $row["name"] ?>!!</h1>
           <ul class="list-inline">
             <li class="list-inline-item"><a href="index.php" class="text-white">Home</a></li>
             <li class="list-inline-item"><span class="text-white">/</span></li>
@@ -123,9 +161,9 @@
                   <div class="d-flex flex-column align-items-center text-center">
                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                     <div class="mt-3">
-                      <h4>MD TANVIR AL FUAD</h4>
-                      <p class="text-secondary mb-1">LIEUTENANT</p>
-                      <p class="text-muted font-size-sm">DHAKA_CANTONMENT, DHAKA</p>
+                      <h4><?php echo $row["name"] ?></h4>
+                      <p class="text-secondary mb-1"><?php echo $row["rk"] ?></p>
+                      <p class="text-muted font-size-sm"><?php echo $row["adds"] ?></p>
                       </div>
                   </div>
                 </div>
@@ -134,16 +172,16 @@
                 <div class="card mt-3" style="padding: 10px 10px 0 10px;">
                     <h3 class="progress-title">Overall Rating</h3>
                     <div class="progress">
-                        <div class="progress-bar" style="width:85%; background:#97c513;">
-                            <div class="progress-value">4.25/<sub>5</sub></div>
+                        <div class="progress-bar" style="width:<?php echo ($row2["s_rt"]*20/$cot); ?>%; background:#97c513;">
+                            <div class="progress-value"><?php echo ($row2["s_rt"]/$cot); ?>/<sub>5</sub></div>
                         </div>
                     </div>
                 </div>
                 <div class="card mt-3" style="padding: 10px 10px 0 10px;">
                   <h3 class="progress-title">Contribution</h3>
                   <div class="progress">
-                      <div class="progress-bar" style="width:45%; background:#c52e13;">
-                          <div class="progress-value">523<sub>DOCS</sub></div>
+                      <div class="progress-bar" style="width:<?php echo $cot*100/5; ?>%; background:#c52e13;">
+                          <div class="progress-value"><?php echo $cot; ?><sub>DOCS</sub></div>
                       </div>
                   </div>
               </div>
@@ -155,11 +193,11 @@
                   
                   <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                     <h6 class="mb-0"><i class="ti-email mr-2 color-one"></i>Email to:</h6>
-                    <span class="text-secondary"><a href="mailto:">user@email.com</a></span>
+                    <span class="text-secondary"><a href="mailto:<?php echo $row["em"] ?>"><?php echo $row["em"] ?></a></span>
                   </li>
                   <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                     <h6 class="mb-0"><i class="ti-mobile mr-2 color-two"></i>Call at:</h6>
-                    <span class="text-secondary"><a href="tel:">+8801622979454</a></span>
+                    <span class="text-secondary"><a href="tel:+880<?php echo $row["mob"] ?>">+880<?php echo $row["mob"] ?></a></span>
                   </li>
                 </li>
                 </ul>
@@ -178,7 +216,7 @@
                       <h6 class="mb-0">Personal Number:</h6>
                     </div>
                     <div class="col-sm-7 text-secondary">
-                      BA10747
+                    <?php echo $row["p_num"] ?>
                     </div>
                   </div>
                   <hr>
@@ -187,7 +225,7 @@
                       <h6 class="mb-0">Rank and Name:</h6>
                     </div>
                     <div class="col-sm-7 text-secondary">
-                      Lt Md Tanvir Al Fuad
+                    <?php echo $row["name"] ?>
                     </div>
                   </div>
                   
@@ -197,7 +235,7 @@
                       <h6 class="mb-0">Date of Birth:</h6>
                     </div>
                     <div class="col-sm-7 text-secondary">
-                      10 May 2000
+                    <?php echo $row["dob"] ?>
                     </div>
                   </div>
                   
@@ -207,7 +245,7 @@
                       <h6 class="mb-0">Address:</h6>
                     </div>
                     <div class="col-sm-7 text-secondary">
-                      Dhaka Cantonment, Dhaka.
+                    <?php echo $row["adds"] ?>
                     </div>
                   </div>
                   
@@ -224,20 +262,30 @@
                 
                 
                 <!--iteration-->
+                <?php while($row1=mysqli_fetch_assoc($stmt)){ 
+                  $t1=$row1['b_name'];
+                  $t2=$row1['var'];
+                  $sql2="SELECT `var` FROM `d_count` WHERE b_name='$t1' AND var='$t2'";
+                  $stmt2=mysqli_query($conn, $sql2);
+                  $s_d=mysqli_num_rows($stmt2);
+                  ?>
+
+
                 <div class="row"> 
                   <div class="mb-1 service-block-two col-lg-12 col-md-12 col-sm-12">
                     <form action="docdet.php" method="post"><button class="chide">  
                     <div class="inner-box">
-                          <div><img class="list_image" src="https://picsum.photos/501/500" alt="book name" /></div>
+                          <div><img class="list_image" src="https://picsum.photos/501/500<?php //echo $row1['pic'] ?>" alt="<?php echo $row1['var'] ?>" /></div>
                           <div class="shape-one"></div>
                           <div class="shape-two"></div>
-                          <h5 class="text">Karo Search</h5>
-                          <div class="text" style="list_details">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</div>
-                          <i class="ml-3 text ti-download"> 1345</i>
-                          <i class="ml-3 text ti-star"> 3.2</i>
+                          <h5 class="text"><?php echo $row1['var'] ?></h5>
+                          <div class="text" style="list_details"><?php echo $row1['des'] ?></div>
+                          <i class="ml-3 text ti-download"> <?php echo $s_d ?></i>
+                          <i class="ml-3 text ti-star"> <?php echo $row1['rate'] ?></i>
                       </div></button></form>
                   </div>
                 </div>
+                <?php } ?>
                 <!--iteration-->
               </div>
             </div> 
